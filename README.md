@@ -25,7 +25,8 @@ docker compose exec redis bash
 
 Then get the ID of the new master node (redis-7007) that will receive the slots:
 ```bash
-MASTER_ID=$(redis-cli -h redis-7007 -p 7007 cluster myid)
+redis-cli -h redis-7007 -p 7007 cluster myid
+# Copy the response
 ```
 
 After that, redistribute the slots to include the new master. This command will:
@@ -33,12 +34,13 @@ After that, redistribute the slots to include the new master. This command will:
 - Take slots from all existing masters evenly
 - The new distribution will help balance the cluster load
 ```bash
-redis-cli -h redis-7001 -p 7001 --cluster reshard redis-7001:7001 << EOF
+redis-cli -h redis-7001 -p 7001 --cluster reshard redis-7001:7001
+
+# Answer respectively
 4096
-$MASTER_ID
+$MASTER_ID #Copied ID
 all
 yes
-EOF
 ```
 
 ### Connecting to Redis
